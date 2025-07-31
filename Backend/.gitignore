@@ -1,0 +1,26 @@
+# Node modules (do not push to git)
+node_modules/
+
+# Environment variables (e.g., DB URI, secret keys)
+.env
+
+# Log files
+logs
+*.log
+npm-debug.log*
+
+# OS-specific
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Optional: coverage, build artifacts, etc.
+coverage/
+dist/
+build/
+
+# Optional: dotenvx or other tooling caches
+.env.*.local
+.envx
