@@ -36,8 +36,9 @@ export interface InputProps extends TextInputProps {
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
   inputRef?: React.RefObject<TextInput>;
-  //   label?: string;
-  //   error?: string;
+  label?: string;
+  error?: string;
+  rightIcon?: React.ReactNode;
 }
 
 export interface DecodedTokenProps {
