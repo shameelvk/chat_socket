@@ -4,11 +4,12 @@ import Input from '@/components/Input'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import Typo from '@/components/Typo'
 import { colors, spacingX, spacingY } from '@/constants/theme'
+import { useAuth } from '@/contexts/authContext'
 import { verticalScale } from '@/utils/styling'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 interface RegisterFormData {
     username: string;
@@ -19,7 +20,7 @@ interface RegisterFormData {
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-
+    const { signup } = useAuth();
     const { control, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
         defaultValues: {
             username: '',
@@ -31,13 +32,13 @@ const Register = () => {
     const onSubmit = async (data: RegisterFormData) => {
         setLoading(true);
         try {
-            // TODO: Implement registration logic here
-            console.log('Registration data:', data);
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            // Navigate to login or main app
-        } catch (error) {
-            console.error('Registration error:', error);
+            await signup(data.username, data.email, data.password);
+        } catch (error: any) {
+            const message =
+                error?.response?.data?.message || error.message || 'Something went wrong';
+            Alert.alert('Registration Failed', message);
+            console.log('Registration error:', error);
+
         } finally {
             setLoading(false);
         }

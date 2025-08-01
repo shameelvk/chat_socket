@@ -4,11 +4,12 @@ import Input from '@/components/Input'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import Typo from '@/components/Typo'
 import { colors, spacingX, spacingY } from '@/constants/theme'
+import { useAuth } from '@/contexts/authContext'
 import { verticalScale } from '@/utils/styling'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 interface LoginFormData {
     email: string;
@@ -18,6 +19,7 @@ interface LoginFormData {
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { signin } = useAuth();
 
     const { control, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
         defaultValues: {
@@ -29,13 +31,13 @@ const Login = () => {
     const onSubmit = async (data: LoginFormData) => {
         setLoading(true);
         try {
-            // TODO: Implement login logic here
-            console.log('Login data:', data);
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            // Navigate to main app
-        } catch (error) {
-            console.error('Login error:', error);
+            await signin(data.email, data.password);
+
+        } catch (error: any) {
+            const message =
+                error?.response?.data?.message || error.message || 'Something went wrong';
+            Alert.alert('Login Failed', message);
+            console.log('Login error:', error);
         } finally {
             setLoading(false);
         }
